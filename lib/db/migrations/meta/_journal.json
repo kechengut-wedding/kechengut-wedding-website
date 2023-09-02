@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1693330609328,
+      "tag": "0000_premium_raider",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1693333009545,
+      "tag": "0001_misty_archangel",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1693612488918,
+      "tag": "0002_natural_russian",
+      "breakpoints": true
+    }
+  ]
+}
