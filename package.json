@@ -12,7 +12,7 @@
     "introspect": "drizzle-kit introspect:mysql",
     "generate": "drizzle-kit generate:mysql",
     "push": "drizzle-kit push:mysql",
-    "migrations": "npx drizzle-kit generate:mysql",
+    "migrations": "pnpm dlx drizzle-kit generate:mysql",
     "studio": "pnpm drizzle-kit studio --port 3001 --verbose",
     "postinstall": "husky install"
   },
