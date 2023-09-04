@@ -18,7 +18,7 @@ export const ImageModal = ({ img }: any) => {
             alt="Ketchengut wedding."
             width={1920}
             height={1920}
-            className="h-auto w-full rounded object-cover object-center shadow"
+            className="h-auto w-full rounded bg-white object-cover object-center shadow"
           />
         </div>
       </DialogTrigger>

@@ -11,7 +11,7 @@ import { db } from "@/lib/db"
 import { galleryImages, guestbookEntries } from "@/lib/db/schema"
 
 const cloudinaryConfig = cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME as string,
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string,
   api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY as string,
   api_secret: process.env.CLOUDINARY_API_SECRET as string,
   secure: true,
@@ -28,33 +28,47 @@ export async function getSignature() {
   return { timestamp, signature }
 }
 
-export async function saveImageToDatabase({
-  public_id,
-  version,
-  signature,
-  secure_url,
-}: any) {
+// // export async function saveImageToDatabase({
+// //   public_id,
+// //   version,
+// //   signature,
+// //   secure_url,
+// // }: any) {
+// //   const user: User | null = await currentUser()
+
+// //   // verify the data
+// //   const expectedSignature = cloudinary.utils.api_sign_request(
+// //     { public_id, version },
+// //     cloudinaryConfig.api_secret as string
+// //   )
+
+// //   // // console.log(public_id)
+
+// //   if (expectedSignature === signature) {
+// //     await db.insert(galleryImages).values({
+// //       fileUrl: secure_url,
+// //       userId: user?.id,
+// //       createdBy: `${user?.firstName} ${user?.lastName}`,
+// //       email: user?.emailAddresses[0].emailAddress,
+// //       publicId: public_id,
+// //     })
+
+// //     redirect("/gallery")
+// //   }
+// // }
+
+export async function saveImageToDatabase(result: any) {
   const user: User | null = await currentUser()
 
-  // verify the data
-  const expectedSignature = cloudinary.utils.api_sign_request(
-    { public_id, version },
-    cloudinaryConfig.api_secret as string
-  )
+  await db.insert(galleryImages).values({
+    fileUrl: result?.info.secure_url,
+    userId: user?.id,
+    createdBy: `${user?.firstName} ${user?.lastName}`,
+    email: user?.emailAddresses[0].emailAddress,
+    publicId: result?.info.public_id,
+  })
 
-  console.log(public_id)
-
-  if (expectedSignature === signature) {
-    await db.insert(galleryImages).values({
-      fileUrl: secure_url,
-      userId: user?.id,
-      createdBy: `${user?.firstName} ${user?.lastName}`,
-      email: user?.emailAddresses[0].emailAddress,
-      publicId: public_id,
-    })
-
-    redirect("/gallery")
-  }
+  revalidatePath("/gallery")
 }
 
 export async function deleteImageFromDatabase({
@@ -71,7 +85,7 @@ export async function deleteImageFromDatabase({
     cloudinaryConfig.api_secret as string
   )
 
-  console.log(public_id)
+  // // console.log(public_id)
 
   if (expectedSignature === signature) {
     await db.insert(galleryImages).values({
@@ -112,7 +126,7 @@ export async function updateGuestbookEntry({
 }) {
   const user: User | null = await currentUser()
 
-  console.log(JSON.stringify(formData, null, 2))
+  // // console.log(JSON.stringify(formData, null, 2))
 
   const entry = formData.get("entry")?.toString() || ""
   const body = entry.slice(0, 500)

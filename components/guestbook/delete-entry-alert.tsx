@@ -23,7 +23,7 @@ export const DeleteEntryAlert = ({ entryId }: { entryId: number }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">
+        <Button variant="secondary">
           <Trash2Icon className="h-4 w-4" />
         </Button>
       </AlertDialogTrigger>

@@ -6,11 +6,13 @@ import {
   SignOutButton,
 } from "@clerk/nextjs"
 import type { User } from "@clerk/nextjs/api"
-import { Edit2Icon, Trash2Icon } from "lucide-react"
 
 import { db } from "@/lib/db"
 import { guestbookEntries } from "@/lib/db/schema"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
+import { SignInBtn } from "@/components/buttons/sign-in-btn"
+import { SignOutBtn } from "@/components/buttons/sign-out-btn"
 import { DeleteEntryAlert } from "@/components/guestbook/delete-entry-alert"
 import { GuestbookForm } from "@/components/guestbook/guestbook-form"
 import { UpdateEntryDialog } from "@/components/guestbook/update-entry-dialog"
@@ -24,39 +26,30 @@ export default async function GuestbookPage() {
   const userEntry = await entries.find((entry) => entry.userId === user?.id)
 
   return (
-    <main className="py-20">
+    <main className="py-36">
       <div className="flex flex-col items-center">
         <h1 className="text-center font-serif text-7xl md:text-9xl">
           Guestbook
         </h1>
 
         <SignedIn>
-          {!userEntry && <GuestbookForm />}
-
-          <Button className="mt-5" variant="secondary">
-            <SignOutButton>Logout</SignOutButton>
-          </Button>
-
-          {/* <div className="mt-4">
-          <form>
-            <div className="flex w-full max-w-sm items-center space-x-2">
-              <Input type="text" id="message" placeholder="Your message..." />
-              <Button type="submit">Sign</Button>
+          <div className="mt-10 flex flex-col items-center gap-y-5">
+            {!userEntry && <GuestbookForm />}
+            <div>
+              <SignOutBtn />
             </div>
-          </form>
-        </div> */}
+          </div>
         </SignedIn>
 
         <SignedOut>
-          <SignInButton afterSignInUrl="/guestbook">
-            <div className={buttonVariants({ variant: "secondary" })}>
-              Sign in
+          <div className="mt-10 flex flex-col items-center gap-y-5">
+            <p>{`To sing the wedding's guestbook, please sign in.`}</p>
+            <div>
+              <SignInBtn />
             </div>
-          </SignInButton>
+          </div>
         </SignedOut>
       </div>
-
-      {/* <h2 className="mt-10 font-serif text-5xl">Leave your message</h2> */}
 
       {userEntry && (
         <section className="mt-10">

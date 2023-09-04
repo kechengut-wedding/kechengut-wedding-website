@@ -17,6 +17,7 @@ export const DownloadButton = ({
   return (
     <Button
       size="icon"
+      variant="secondary"
       onClick={() => downloadPhoto(fileUrl, `${id}${fileExtension}`)}
       // className="rounded-full bg-black/50 p-2 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white"
       title="Download fullsize version"

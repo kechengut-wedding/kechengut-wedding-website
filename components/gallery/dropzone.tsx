@@ -7,6 +7,8 @@ import { useDropzone } from "react-dropzone"
 
 import { getSignature, saveImageToDatabase } from "@/app/_actions"
 
+import { Button } from "../ui/button"
+
 export const Dropzone = ({ className }: { className: string }) => {
   const [files, setFiles] = useState([])
   const [rejected, setRejected] = useState([])
@@ -33,7 +35,7 @@ export const Dropzone = ({ className }: { className: string }) => {
       "image/*": [],
     },
     maxSize: 1024 * 1000,
-    maxFiles: 1,
+    maxFiles: 10,
     onDrop,
   })
 
@@ -83,8 +85,6 @@ export const Dropzone = ({ className }: { className: string }) => {
       body: formData,
     }).then((res) => res.json())
 
-    console.log(JSON.stringify(data, null, 2))
-
     // write to database using server actions
     await saveImageToDatabase({
       version: data?.version,
@@ -116,19 +116,10 @@ export const Dropzone = ({ className }: { className: string }) => {
       <section className="mt-10">
         <div className="flex gap-4">
           <h2 className="title text-3xl font-semibold">Preview</h2>
-          <button
-            type="button"
-            onClick={removeAll}
-            className="mt-1 rounded-md border border-rose-400 px-3 text-[12px] font-bold uppercase tracking-wider text-stone-500 transition-colors hover:bg-rose-400 hover:text-white"
-          >
+          <Button variant="secondary" onClick={removeAll}>
             Remove all files
-          </button>
-          <button
-            type="submit"
-            className="ml-auto mt-1 rounded-md border border-purple-400 px-3 text-[12px] font-bold uppercase tracking-wider text-stone-500 transition-colors hover:bg-purple-400 hover:text-white"
-          >
-            Upload to Cloudinary
-          </button>
+          </Button>
+          <Button type="submit">Upload to Cloudinary</Button>
         </div>
 
         {/* Accepted files */}
@@ -146,7 +137,7 @@ export const Dropzone = ({ className }: { className: string }) => {
                 onLoad={() => {
                   URL.revokeObjectURL(file.preview)
                 }}
-                className="h-full w-full rounded-md object-contain"
+                className="h-full w-full rounded-md bg-white object-contain"
               />
               <button
                 type="button"
