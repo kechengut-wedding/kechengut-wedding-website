@@ -1,10 +1,11 @@
-import "./globals.css"
+import "@/app/globals.css"
 
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import { ClerkProvider } from "@clerk/nextjs"
 
 import { cn } from "@/lib/utils"
+import { Toaster } from "@/components/ui/toaster"
 import { Header } from "@/components/navigation/header"
 
 export const metadata: Metadata = {
@@ -64,6 +65,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={cn(jubilee.variable, abalos.variable, "font-sans")}>
+          <Toaster />
           <Header />
           <div className="mx-auto max-w-screen-2xl">{children}</div>
         </body>

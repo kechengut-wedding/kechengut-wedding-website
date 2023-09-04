@@ -15,10 +15,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/use-toast"
 import { deleteGuestbookEntry } from "@/app/_actions"
 
 export const DeleteEntryAlert = ({ entryId }: { entryId: number }) => {
   let [isPending, startTransition] = useTransition()
+  const { toast } = useToast()
 
   return (
     <AlertDialog>
@@ -41,6 +43,12 @@ export const DeleteEntryAlert = ({ entryId }: { entryId: number }) => {
             onClick={() =>
               startTransition(() => {
                 deleteGuestbookEntry(entryId)
+                toast({
+                  title: "Message deleted",
+                  description:
+                    "Your guestbook message has been successfully deleted.",
+                  variant: "destructive",
+                })
               })
             }
           >

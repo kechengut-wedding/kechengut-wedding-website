@@ -5,18 +5,31 @@ import { experimental_useFormStatus as useFormStatus } from "react-dom"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useToast } from "@/components/ui/use-toast"
 import { saveGuestbookEntry } from "@/app/_actions"
 
 export const GuestbookForm = () => {
   const formRef = useRef<HTMLFormElement>(null)
   const { pending } = useFormStatus()
+  const { toast } = useToast()
+
   return (
     <form
       style={{ opacity: !pending ? 1 : 0.7 }}
       className="relative mt-4"
       ref={formRef}
       action={async (formData) => {
-        await saveGuestbookEntry(formData)
+        const result = await saveGuestbookEntry(formData)
+
+        if (result?.error) {
+          toast({
+            title: "Something went wrong",
+            description: result.error,
+          })
+        } else {
+          toast({ title: "Success", description: "Guestbook message added." })
+        }
+
         formRef.current?.reset()
       }}
     >
@@ -26,7 +39,7 @@ export const GuestbookForm = () => {
           name="entry"
           type="text"
           placeholder="Your message..."
-          className="w-40 bg-stone-50 md:w-96"
+          className="w-40 bg-white md:w-96"
         />
         <Button type="submit">Submit</Button>
       </div>

@@ -65,12 +65,10 @@ export default async function GuestbookPage() {
 
       <section className="mt-10">
         <h2 className="font-serif text-xl font-medium">
-          All guests&apos; entries
+          {`All guests' entries`}
         </h2>
         {allEntries && allEntries.length === 0 ? (
-          <div className="mt-2.5">
-            There&apos;s no entries in the guestbook.
-          </div>
+          <div className="mt-2.5">{`There's no entries in the guestbook.`}</div>
         ) : (
           <>
             {allEntries.map((entry, entryIdx) => (

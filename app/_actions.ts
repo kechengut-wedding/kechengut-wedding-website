@@ -107,12 +107,18 @@ export async function saveGuestbookEntry(formData: FormData) {
   const entry = formData.get("entry")?.toString() || ""
   const body = entry.slice(0, 500)
 
-  await db.insert(guestbookEntries).values({
-    userId: user?.id,
-    body: body,
-    email: email,
-    createdBy: createdBy,
-  })
+  try {
+    await db.insert(guestbookEntries).values({
+      userId: user?.id,
+      body: body,
+      email: email,
+      createdBy: createdBy,
+    })
+  } catch (error) {
+    return {
+      error: "Something went wrong!",
+    }
+  }
 
   revalidatePath("/guestbook")
 }

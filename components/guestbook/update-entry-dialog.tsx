@@ -15,6 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
+import { toast } from "@/components/ui/use-toast"
 import { updateGuestbookEntry } from "@/app/_actions"
 
 export const UpdateEntryDialog = ({
@@ -50,6 +51,11 @@ export const UpdateEntryDialog = ({
           action={async (formData) => {
             await updateGuestbookEntry({ formData, entryId })
             formRef.current?.reset()
+            toast({
+              title: "Message updated",
+              description:
+                "Your guestbook message has been successfully updated.",
+            })
             setOpen(false)
           }}
         >
