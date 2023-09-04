@@ -70,7 +70,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={cn(jubilee.variable, abalos.variable, "font-sans")}>
           <Header />
-          <div className="container mx-auto max-w-screen-2xl">{children}</div>
+          <div className="mx-auto max-w-screen-2xl">{children}</div>
         </body>
       </html>
     </ClerkProvider>

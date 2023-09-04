@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { SignedIn, SignedOut } from "@clerk/nextjs"
 
 import { db } from "@/lib/db"
@@ -12,11 +11,11 @@ export default async function GalleryPage() {
   const imgs = await db.select().from(galleryImages)
 
   return (
-    <main className="py-36">
+    <main className="container py-36">
       <section className="flex flex-col items-center justify-center gap-y-5">
         <h1 className="font-serif text-7xl md:text-9xl">{`Gallery`}</h1>
         <SignedIn>
-          <div className="flex gap-x-5">
+          <div className="flex h-12 items-center gap-x-5">
             <ImagesUpload />
             <SignOutBtn />
           </div>
@@ -30,7 +29,9 @@ export default async function GalleryPage() {
       <section className="mt-20">
         {imgs && imgs.length ? (
           <div className="columns-1 gap-5 sm:columns-1 lg:columns-2 lg:gap-5 xl:columns-3 [&>div:not(:first-child)]:mt-5">
-            {imgs?.map((img, imgIdx) => <ImageModal img={img} idx={imgIdx} />)}
+            {imgs?.map((img, imgIdx) => (
+              <ImageModal img={img} key={imgIdx} idx={imgIdx} />
+            ))}
           </div>
         ) : (
           <div className="mx-auto max-w-3xl text-center">

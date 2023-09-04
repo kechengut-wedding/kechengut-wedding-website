@@ -1,16 +1,8 @@
-import {
-  currentUser,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignOutButton,
-} from "@clerk/nextjs"
+import { currentUser, SignedIn, SignedOut } from "@clerk/nextjs"
 import type { User } from "@clerk/nextjs/api"
 
 import { db } from "@/lib/db"
 import { guestbookEntries } from "@/lib/db/schema"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
 import { SignInBtn } from "@/components/buttons/sign-in-btn"
 import { SignOutBtn } from "@/components/buttons/sign-out-btn"
 import { DeleteEntryAlert } from "@/components/guestbook/delete-entry-alert"
@@ -26,7 +18,7 @@ export default async function GuestbookPage() {
   const userEntry = await entries.find((entry) => entry.userId === user?.id)
 
   return (
-    <main className="py-36">
+    <main className="container py-36">
       <div className="flex flex-col items-center">
         <h1 className="text-center font-serif text-7xl md:text-9xl">
           Guestbook
@@ -77,8 +69,8 @@ export default async function GuestbookPage() {
           </div>
         ) : (
           <>
-            {allEntries.map((entry) => (
-              <div className="mt-2.5">
+            {allEntries.map((entry, entryIdx) => (
+              <div className="mt-2.5" key={entryIdx}>
                 <span className="text-stone-500">
                   {`${entry.createdBy ?? entry.email}: `}
                 </span>

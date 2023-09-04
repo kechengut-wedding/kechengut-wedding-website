@@ -4,24 +4,20 @@ import { auth } from "@clerk/nextjs"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { DeleteImageButton } from "@/components/gallery/delete-image-button"
 import { DownloadButton } from "@/components/gallery/download-button"
+import { ImageCard } from "@/components/gallery/image-card"
 import { OpenButton } from "@/components/gallery/open-button"
 
-export const ImageModal = ({ img }: any) => {
+export const ImageModal = ({ img, idx }: any) => {
   const { userId }: { userId: string | null } = auth()
 
   return (
     <Dialog>
       <DialogTrigger asChild className="cursor-pointer">
-        <div key={img?.fileUrl!} className="break-inside-avoid">
-          <Image
-            src={img?.fileUrl!}
-            alt="Ketchengut wedding."
-            width={1920}
-            height={1920}
-            className="h-auto w-full rounded bg-white object-cover object-center shadow"
-          />
+        <div>
+          <ImageCard img={img} idx={idx} />
         </div>
       </DialogTrigger>
+
       <DialogContent className="min-w-max bg-white p-0">
         {/* <DialogHeader>
                   <DialogTitle>Are you sure absolutely sure?</DialogTitle>
