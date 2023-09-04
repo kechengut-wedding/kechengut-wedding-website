@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { currentUser, SignedIn, SignedOut } from "@clerk/nextjs"
 import type { User } from "@clerk/nextjs/api"
 
@@ -9,6 +10,9 @@ import { DeleteEntryAlert } from "@/components/guestbook/delete-entry-alert"
 import { GuestbookForm } from "@/components/guestbook/guestbook-form"
 import { UpdateEntryDialog } from "@/components/guestbook/update-entry-dialog"
 
+export const metadata: Metadata = {
+  title: "Guestbook",
+}
 export default async function GuestbookPage() {
   const user: User | null = await currentUser()
 

@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { SignedIn, SignedOut } from "@clerk/nextjs"
 
 import { db } from "@/lib/db"
@@ -6,6 +7,10 @@ import { SignInBtn } from "@/components/buttons/sign-in-btn"
 import { SignOutBtn } from "@/components/buttons/sign-out-btn"
 import { ImageModal } from "@/components/gallery/image-modal"
 import { ImagesUpload } from "@/components/gallery/images-upload"
+
+export const metadata: Metadata = {
+  title: "Gallery",
+}
 
 export default async function GalleryPage() {
   const imgs = await db.select().from(galleryImages)
