@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
-import { currentUser, SignedIn, SignedOut } from "@clerk/nextjs"
+import Link from "next/link"
+import { currentUser, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs"
 import type { User } from "@clerk/nextjs/api"
 
 import { db } from "@/lib/db"
 import { guestbookEntries } from "@/lib/db/schema"
 import { SignInBtn } from "@/components/buttons/sign-in-btn"
-import { SignOutBtn } from "@/components/buttons/sign-out-btn"
 import { DeleteEntryAlert } from "@/components/guestbook/delete-entry-alert"
 import { GuestbookForm } from "@/components/guestbook/guestbook-form"
 import { UpdateEntryDialog } from "@/components/guestbook/update-entry-dialog"
@@ -22,7 +22,7 @@ export default async function GuestbookPage() {
   const userEntry = await entries.find((entry) => entry.userId === user?.id)
 
   return (
-    <main className="container py-36">
+    <main className="container py-32">
       <div className="flex flex-col items-center">
         <h1 className="text-center font-serif text-7xl md:text-9xl">
           Guestbook
@@ -39,18 +39,15 @@ export default async function GuestbookPage() {
                 }
               />
             )}
-            <div>
-              <SignOutBtn />
-            </div>
           </div>
         </SignedIn>
 
         <SignedOut>
-          <div className="mt-10 flex flex-col items-center gap-y-5">
-            <p>{`To sign the wedding's guestbook, please sign in.`}</p>
-            <div>
-              <SignInBtn />
-            </div>
+          <div className="flex gap-x-1">
+            <p>{`To sign the wedding's guestbook, please `}</p>
+            <SignInButton afterSignInUrl="/guestbook">
+              <span className="cursor-pointer font-bold hover:underline">{`sign in.`}</span>
+            </SignInButton>
           </div>
         </SignedOut>
       </div>

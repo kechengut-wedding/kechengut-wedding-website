@@ -37,9 +37,10 @@ export const ImageModal = ({ img, idx }: any) => {
         <div className="absolute left-4 top-4 flex gap-x-2.5">
           <DownloadButton fileUrl={img?.fileUrl} id={img?.id} />
           <OpenButton fileUrl={img?.fileUrl} />
-          {userId === img.userId && (
-            <DeleteImageButton imageId={img?.id} publicId={img?.publicId} />
-          )}
+          {userId === img.userId ||
+            (userId === "user_2UyrZktBXCfK56AMare63oQFUlg" && (
+              <DeleteImageButton imageId={img?.id} publicId={img?.publicId} />
+            ))}
         </div>
       </DialogContent>
     </Dialog>

@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { RotateCcwIcon } from "lucide-react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { z } from "zod"
 
+import { GuestbookFormInputs, GuestbookFormSchema } from "@/lib/zod-schemas"
 // // import { experimental_useFormStatus as useFormStatus } from "react-dom"
 
 import { Button } from "@/components/ui/button"
@@ -20,16 +21,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { saveGuestbookEntry } from "@/app/_actions"
-
-const FormSchema = z.object({
-  createdBy: z.string().nonempty("Name is required."),
-  entry: z
-    .string()
-    .nonempty("Message is required.")
-    .min(6, { message: "Message must be at least 6 characters." }),
-})
-
-type Inputs = z.infer<typeof FormSchema>
 
 export const GuestbookForm = ({ createdBy }: any) => {
   // // const [data, setData] = useState<Inputs>()
@@ -50,18 +41,23 @@ export const GuestbookForm = ({ createdBy }: any) => {
   // //   resolver: zodResolver(FormDataSchema),
   // // })
 
-  const form = useForm<Inputs>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<GuestbookFormInputs>({
+    resolver: zodResolver(GuestbookFormSchema),
     defaultValues: {
       createdBy: createdBy,
     },
   })
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<GuestbookFormInputs> = async (data) => {
+    if (submitting) {
+      return false
+    }
+    setSubmitting(true)
+
     const { createdBy, entry } = data
 
     const result = await saveGuestbookEntry({ createdBy, entry })
-    console.log(result)
+
     if (!result) {
       toast({
         title: "Error",
@@ -73,14 +69,8 @@ export const GuestbookForm = ({ createdBy }: any) => {
         description: "Your message was created.",
       })
     }
-    // // if (result.error) {
-    // //   toast({
-    // //     title: "Error",
-    // //     description: result.error,
-    // //   })
-    // // }
-    // // reset()
-    // // setData(result.data)
+
+    setSubmitting(false)
   }
 
   return (
@@ -122,7 +112,16 @@ export const GuestbookForm = ({ createdBy }: any) => {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={submitting}>
+          {submitting ? (
+            <p className="flex items-center gap-x-1">
+              <span>{`Submitting`}</span>
+              <RotateCcwIcon className="h-4 w-4 animate-spin" />
+            </p>
+          ) : (
+            <p>{`Submit`}</p>
+          )}
+        </Button>
       </form>
     </Form>
   )

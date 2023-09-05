@@ -1,7 +1,7 @@
 "use client"
 
 import { useTransition } from "react"
-import { Trash2Icon } from "lucide-react"
+import { RotateCcwIcon, Trash2Icon } from "lucide-react"
 
 import {
   AlertDialog,
@@ -40,6 +40,7 @@ export const DeleteEntryAlert = ({ entryId }: { entryId: number }) => {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
+            disabled={isPending}
             onClick={() =>
               startTransition(() => {
                 deleteGuestbookEntry(entryId)
@@ -52,7 +53,14 @@ export const DeleteEntryAlert = ({ entryId }: { entryId: number }) => {
               })
             }
           >
-            Delete
+            {isPending ? (
+              <p className="flex items-center gap-x-1">
+                <span>{`Deleting`}</span>
+                <RotateCcwIcon className="h-4 w-4 animate-spin" />
+              </p>
+            ) : (
+              <p>{`Delete`}</p>
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
