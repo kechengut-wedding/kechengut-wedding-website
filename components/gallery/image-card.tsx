@@ -14,7 +14,7 @@ export const ImageCard = ({ img, idx }: { img: any; idx: number }) => {
         await animate(
           scope.current,
           { opacity: [0, 1] },
-          { duration: 0.5, delay: 0.1 * idx }
+          { duration: 0.5, delay: 0.2 * idx }
         )
       }
       enterAnimation()
@@ -23,7 +23,7 @@ export const ImageCard = ({ img, idx }: { img: any; idx: number }) => {
         await animate(
           scope.current,
           { opacity: [1, 0] },
-          { duration: 0.5, delay: 0.1 * idx }
+          { duration: 0.5, delay: 0.2 * idx }
         )
         safeToRemove()
       }
