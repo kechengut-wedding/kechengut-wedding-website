@@ -47,7 +47,7 @@ export default async function GuestbookPage() {
 
         <SignedOut>
           <div className="mt-10 flex flex-col items-center gap-y-5">
-            <p>{`To sing the wedding's guestbook, please sign in.`}</p>
+            <p>{`To sign the wedding's guestbook, please sign in.`}</p>
             <div>
               <SignInBtn />
             </div>
