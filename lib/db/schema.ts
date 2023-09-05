@@ -13,7 +13,6 @@ export const guestbookEntries = mysqlTable("guestbookEntries", {
   id: serial("id").primaryKey(),
   userId: text("userId"),
   createdBy: text("createdBy"),
-  email: text("email"),
   body: text("body"),
 })
 

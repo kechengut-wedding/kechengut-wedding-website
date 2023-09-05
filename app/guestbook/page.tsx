@@ -30,7 +30,15 @@ export default async function GuestbookPage() {
 
         <SignedIn>
           <div className="mt-10 flex flex-col items-center gap-y-5">
-            {!userEntry && <GuestbookForm />}
+            {!userEntry && (
+              <GuestbookForm
+                createdBy={
+                  user?.firstName
+                    ? `${user?.firstName} ${user?.lastName}`
+                    : user?.emailAddresses[0].emailAddress
+                }
+              />
+            )}
             <div>
               <SignOutBtn />
             </div>
@@ -51,13 +59,15 @@ export default async function GuestbookPage() {
         <section className="mt-10">
           <h2 className="font-serif text-xl font-medium">Your entry</h2>
           <div className="mt-2.5">
-            <span className="text-stone-500">
-              {`${userEntry.createdBy ?? userEntry.email}: `}
-            </span>
+            <span className="text-stone-500">{`${userEntry.createdBy}: `}</span>
             <span>{userEntry.body}</span>
           </div>
           <div className="mt-2 flex gap-x-2">
-            <UpdateEntryDialog entryId={userEntry.id} body={userEntry.body!} />
+            <UpdateEntryDialog
+              entryId={userEntry.id}
+              createdBy={userEntry.createdBy!}
+              body={userEntry.body!}
+            />
             <DeleteEntryAlert entryId={userEntry.id} />
           </div>
         </section>
@@ -73,9 +83,7 @@ export default async function GuestbookPage() {
           <>
             {allEntries.map((entry, entryIdx) => (
               <div className="mt-2.5" key={entryIdx}>
-                <span className="text-stone-500">
-                  {`${entry.createdBy ?? entry.email}: `}
-                </span>
+                <span className="text-stone-500">{`${entry.createdBy}: `}</span>
                 <span>{entry.body}</span>
               </div>
             ))}

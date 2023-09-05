@@ -1,0 +1,1 @@
+ALTER TABLE `guestbookEntries` DROP COLUMN `email`;

@@ -1,8 +1,10 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Edit2Icon } from "lucide-react"
-import { experimental_useFormStatus as useFormStatus } from "react-dom"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -14,20 +16,73 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
+import { Textarea } from "@/components/ui/textarea"
+import { toast, useToast } from "@/components/ui/use-toast"
 import { updateGuestbookEntry } from "@/app/_actions"
+
+const FormSchema = z.object({
+  createdBy: z.string().nonempty("Name is required."),
+  entry: z
+    .string()
+    .nonempty("Message is required.")
+    .min(6, { message: "Message must be at least 6 characters." }),
+})
+
+type Inputs = z.infer<typeof FormSchema>
 
 export const UpdateEntryDialog = ({
   entryId,
+  createdBy,
   body,
 }: {
   entryId: number
+  createdBy: string
   body: string
 }) => {
-  const formRef = useRef<HTMLFormElement>(null)
-  const { pending } = useFormStatus()
   const [open, setOpen] = useState(false)
+
+  const [submitting, setSubmitting] = useState(false)
+  const { toast } = useToast()
+
+  const form = useForm<Inputs>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      createdBy: createdBy,
+      entry: body,
+    },
+  })
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const { createdBy, entry } = data
+
+    const result = await updateGuestbookEntry({ createdBy, entry, entryId })
+
+    setOpen(false)
+
+    if (!result) {
+      toast({
+        title: "Error",
+        description: "Something went wrong.",
+      })
+    } else {
+      toast({
+        title: "Sucess!",
+        description: "Your message was created.",
+      })
+    }
+    // // reset()
+    // // setData(result.data)
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -44,28 +99,50 @@ export const UpdateEntryDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        <form
-          style={{ opacity: !pending ? 1 : 0.7 }}
-          className="relative"
-          ref={formRef}
-          action={async (formData) => {
-            await updateGuestbookEntry({ formData, entryId })
-            formRef.current?.reset()
-            toast({
-              title: "Message updated",
-              description:
-                "Your guestbook message has been successfully updated.",
-            })
-            setOpen(false)
-          }}
-        >
-          <Input id="entry" name="entry" defaultValue={body} />
-          <DialogFooter>
-            <Button type="submit" className="mt-4">
-              Save changes
-            </Button>
-          </DialogFooter>
-        </form>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="relative mt-4 flex w-96 flex-col gap-y-5"
+          >
+            <FormField
+              control={form.control}
+              name="createdBy"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Name of the guest" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="entry"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Message</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Message to the bride and groom."
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <DialogFooter>
+              <Button type="submit" className="mt-4">
+                Save changes
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )
